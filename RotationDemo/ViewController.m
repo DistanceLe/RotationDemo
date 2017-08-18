@@ -18,14 +18,12 @@
 @property(nonatomic, strong)NSString* imageName;
 @property(nonatomic, strong)NSString* imageName1;
 @property(nonatomic, strong)NSString* imageName2;
-@property(nonatomic, assign)CGFloat angle;
-@property(nonatomic, assign)CGFloat angle1;
-@property(nonatomic, assign)CGFloat angle2;
-@property(nonatomic, strong)NSTimer* time;
-@property(nonatomic, strong)NSTimer* time1;
-@property(nonatomic, strong)NSTimer* time2;
 
 @property(nonatomic, assign)BOOL imageClip;
+
+@property(nonatomic, assign)NSInteger timesNum;
+@property(nonatomic, assign)NSInteger timesNum1;
+@property(nonatomic, assign)NSInteger timesNum2;
 
 @end
 
@@ -36,7 +34,7 @@
     self.view.backgroundColor=[UIColor lightGrayColor];
     
     //设置是否裁剪图片，不裁剪的话，图片会相应的缩小，裁剪则不会缩小 但是边缘部分会被去掉。
-    self.imageClip=YES;
+    self.imageClip=NO;
     
     _imageName=@"icon";
     _imageView=[[UIImageView alloc]initWithFrame:CGRectMake(20, 50, 150, 150)];
@@ -53,10 +51,6 @@
     
     [_imageView.layer addSublayer:line1];
     [_imageView.layer addSublayer:line2];
-    
-    _time=[NSTimer timerWithTimeInterval:3 target:self selector:@selector(rotateWithBeginangle:) userInfo:_imageName repeats:YES];
-    [_time fire];
-    [[NSRunLoop currentRunLoop]addTimer:_time forMode:NSRunLoopCommonModes];
     
     /**  =========================== */
     
@@ -76,10 +70,6 @@
     [_imageView1.layer addSublayer:line11];
     [_imageView1.layer addSublayer:line21];
     
-    _time1=[NSTimer timerWithTimeInterval:3 target:self selector:@selector(rotateWithBeginangle:) userInfo:_imageName1 repeats:YES];
-    [_time1 fire];
-    [[NSRunLoop currentRunLoop]addTimer:_time1 forMode:NSRunLoopCommonModes];
-    
     /**  =========================== */
     
     _imageName2=@"test4";
@@ -98,66 +88,26 @@
     [_imageView2.layer addSublayer:line12];
     [_imageView2.layer addSublayer:line22];
     
-    _time2=[NSTimer timerWithTimeInterval:3 target:self selector:@selector(rotateWithBeginangle:) userInfo:_imageName2 repeats:YES];
-    [_time2 fire];
-    [[NSRunLoop currentRunLoop]addTimer:_time2 forMode:NSRunLoopCommonModes];
-    
-    
+
+    [self rotateImageWithName:_imageName imageView:_imageView angle:0  times:1];
+    [self rotateImageWithName:_imageName1 imageView:_imageView1 angle:0  times:1];
+    [self rotateImageWithName:_imageName2 imageView:_imageView2 angle:0  times:1];
 }
 
--(void)rotateWithBeginangle:(NSTimer*)obj{
-    NSString* imageName=obj.userInfo;
-    if (imageName==self.imageName) {
-        [self rotateImageWithName:imageName imageView:self.imageView angle:self.angle+=10];
-    }else if(imageName==self.imageName1){
-        [self rotateImageWithName:imageName imageView:self.imageView1 angle:self.angle1+=10 ];
-    }else{
-        [self rotateImageWithName:imageName imageView:self.imageView2 angle:self.angle2+=10];
-    }
-}
--(void)rotateImageWithName:(NSString*)imageName imageView:(UIImageView*)imageView angle:(CGFloat)angle{
+-(void)rotateImageWithName:(NSString*)imageName imageView:(UIImageView*)imageView angle:(CGFloat)angle times:(NSInteger)times{
     
-    UIImage* image=[UIImage imageNamed:imageName];
-    image=[LJImageTools rotationImage:image angle:angle+10 clip:_imageClip];
-    imageView.image=image;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(  0.3*NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_queue_t anyncQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_sync(anyncQueue, ^{
+        
+        CGFloat interval = 1/30.0;
+        CGFloat baseNum = 1.0;
         UIImage* image=[UIImage imageNamed:imageName];
-        image=[LJImageTools rotationImage:image angle:angle+20 clip:_imageClip];
-        imageView.image=image;
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(  0.3*NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            UIImage* image=[UIImage imageNamed:imageName];
-            image=[LJImageTools rotationImage:image angle:angle+30 clip:_imageClip];
+        image=[LJImageTools rotationImage:image angle:angle+times*baseNum clip:self.imageClip];
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(interval*NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            
             imageView.image=image;
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(  0.3*NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                UIImage* image=[UIImage imageNamed:imageName];
-                image=[LJImageTools rotationImage:image angle:angle+40 clip:_imageClip];
-                imageView.image=image;
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(  0.3*NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    UIImage* image=[UIImage imageNamed:imageName];
-                    image=[LJImageTools rotationImage:image angle:angle+50 clip:_imageClip];
-                    imageView.image=image;
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(  0.3*NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                        UIImage* image=[UIImage imageNamed:imageName];
-                        image=[LJImageTools rotationImage:image angle:angle+60 clip:_imageClip];
-                        imageView.image=image;
-                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(  0.3*NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                            UIImage* image=[UIImage imageNamed:imageName];
-                            image=[LJImageTools rotationImage:image angle:angle+70 clip:_imageClip];
-                            imageView.image=image;
-                            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(  0.3*NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                                UIImage* image=[UIImage imageNamed:imageName];
-                                image=[LJImageTools rotationImage:image angle:angle+80 clip:_imageClip];
-                                imageView.image=image;
-                                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(  0.3*NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                                    UIImage* image=[UIImage imageNamed:imageName];
-                                    image=[LJImageTools rotationImage:image angle:angle+90 clip:_imageClip];
-                                    imageView.image=image;
-                                });
-                            });
-                        });
-                    });
-                });
-            });
+            [self rotateImageWithName:imageName imageView:imageView angle:angle times:(times+1)];
         });
     });
 }

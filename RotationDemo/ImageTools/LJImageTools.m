@@ -207,15 +207,15 @@
     double translateY = 0;
     
     //使之顺时针旋转
-    angle=360-angle;
+    angle=fabs(360-angle);
     
     //角度换成弧度
     NSInteger multiple=angle/360;
     angle=angle-360*multiple;
     rotate=(angle)*M_PI/180;
     
-    rect = CGRectMake(0, 0, image.size.width, image.size.height);
-    CGSize imgSize = CGSizeMake(image.size.width, image.size.height);
+    rect = CGRectMake(0, 0, image.size.width*image.scale, image.size.height*image.scale);
+    CGSize imgSize = CGSizeMake(image.size.width*image.scale, image.size.height*image.scale);
     
     //因为图片是一个矩形，以图片的左上角为原点，对角线的一半为半径，画出一个圆。
     //此时图片的中心点的坐标的绝对值就是（image.size.with/2, image.size.height/2)
@@ -258,7 +258,7 @@
     
     UIGraphicsBeginImageContext(imgSize);
     CGContextRef context = UIGraphicsGetCurrentContext();
-
+    
     //1.画布延Y轴下移height
     CGContextTranslateCTM(context, 0.0, rect.size.height);
     //2.对Y轴做垂直翻转
@@ -304,12 +304,14 @@
         rect.origin=CGPointMake(offsetX, offsetY);
         rect.size=imgSize;
     }
-
+    
     //最后绘制图片
     CGContextDrawImage(context, rect, image.CGImage);
     
     UIImage *newPic = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
+    newPic = [UIImage imageWithCGImage:newPic.CGImage scale:image.scale orientation:UIImageOrientationUp];
+    
     return newPic;
 }
 
