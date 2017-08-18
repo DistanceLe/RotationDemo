@@ -219,7 +219,7 @@
     
     //因为图片是一个矩形，以图片的左上角为原点，对角线的一半为半径，画出一个圆。
     //此时图片的中心点的坐标的绝对值就是（image.size.with/2, image.size.height/2)
-    double radius=sqrtf(powf(imgSize.width, 2)+powf(imgSize.height, 2))/2;
+    double radius=sqrtf(powf(imgSize.width, 2)+powf(imgSize.height, 2))/2.0;
     
     //求出这个矩形的对角线所形成的角  反三角函数
     double originrRadian=asin(imgSize.width/2.0/radius);

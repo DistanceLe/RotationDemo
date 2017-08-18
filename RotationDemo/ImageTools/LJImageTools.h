@@ -18,7 +18,7 @@
 /**  旋转图片90度一个单位 上下左右*/
 +(UIImage*)rotationImage:(UIImage*)image rotation:(UIImageOrientation)orientation;
 
-/**  旋转图片 自定义角度0~360 大于360会自动减去360 */
+/**  旋转图片 自定义角度0~360 大于360会自动减去360, clip YES则图片大小不变，NO则在原图上变小旋转 */
 +(UIImage *)rotationImage:(UIImage *)image angle:(CGFloat)angle clip:(BOOL)clip;
 
 
