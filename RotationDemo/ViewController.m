@@ -20,6 +20,8 @@
 @property(nonatomic, strong)NSString* imageName2;
 
 @property(nonatomic, assign)BOOL imageClip;
+@property(nonatomic, assign)BOOL imageClip1;
+@property(nonatomic, assign)BOOL imageClip2;
 
 @property(nonatomic, assign)NSInteger timesNum;
 @property(nonatomic, assign)NSInteger timesNum1;
@@ -35,6 +37,8 @@
     
     //设置是否裁剪图片，不裁剪的话，图片会相应的缩小，裁剪则不会缩小 但是边缘部分会被去掉。
     self.imageClip=NO;
+    self.imageClip1=NO;
+    self.imageClip2=YES;
     
     _imageName=@"icon";
     _imageView=[[UIImageView alloc]initWithFrame:CGRectMake(20, 50, 150, 150)];
@@ -59,7 +63,7 @@
     _imageView1.contentMode=UIViewContentModeScaleAspectFit;
     _imageView1.backgroundColor=[UIColor redColor];
     UIImage* image1=[UIImage imageNamed:_imageName1];
-    image=[LJImageTools rotationImage:image1 angle:70 clip:_imageClip];
+    image=[LJImageTools rotationImage:image1 angle:70 clip:_imageClip1];
     
     _imageView1.image=image;
     [self.view addSubview:_imageView1];
@@ -77,7 +81,7 @@
     _imageView2.contentMode=UIViewContentModeScaleAspectFit;
     _imageView2.backgroundColor=[UIColor redColor];
     UIImage* image2=[UIImage imageNamed:_imageName2];
-    image=[LJImageTools rotationImage:image2 angle:70 clip:_imageClip];
+    image=[LJImageTools rotationImage:image2 angle:70 clip:_imageClip2];
     
     _imageView2.image=image;
     [self.view addSubview:_imageView2];
@@ -89,12 +93,12 @@
     [_imageView2.layer addSublayer:line22];
     
 
-    [self rotateImageWithName:_imageName imageView:_imageView angle:0  times:1];
-    [self rotateImageWithName:_imageName1 imageView:_imageView1 angle:0  times:1];
-    [self rotateImageWithName:_imageName2 imageView:_imageView2 angle:0  times:1];
+    [self rotateImageWithName:_imageName imageView:_imageView angle:0  times:1 isClip:self.imageClip];
+    [self rotateImageWithName:_imageName1 imageView:_imageView1 angle:0  times:1 isClip:self.imageClip1];
+    [self rotateImageWithName:_imageName2 imageView:_imageView2 angle:0  times:1 isClip:self.imageClip2];
 }
 
--(void)rotateImageWithName:(NSString*)imageName imageView:(UIImageView*)imageView angle:(CGFloat)angle times:(NSInteger)times{
+-(void)rotateImageWithName:(NSString*)imageName imageView:(UIImageView*)imageView angle:(CGFloat)angle times:(NSInteger)times isClip:(BOOL)isClip{
     
     dispatch_queue_t anyncQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_sync(anyncQueue, ^{
@@ -102,12 +106,12 @@
         CGFloat interval = 1/30.0;
         CGFloat baseNum = 1.0;
         UIImage* image=[UIImage imageNamed:imageName];
-        image=[LJImageTools rotationImage:image angle:angle+times*baseNum clip:self.imageClip];
+        image=[LJImageTools rotationImage:image angle:angle+times*baseNum clip:isClip];
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(interval*NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             
             imageView.image=image;
-            [self rotateImageWithName:imageName imageView:imageView angle:angle times:(times+1)];
+            [self rotateImageWithName:imageName imageView:imageView angle:angle times:(times+1) isClip:isClip];
         });
     });
 }
