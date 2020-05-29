@@ -225,7 +225,7 @@
 				TargetAttributes = {
 					2A9005431D7667580029CEDC = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = KKHXU36BGT;
+						DevelopmentTeam = 74MC75RT69;
 					};
 					2A90055C1D7667580029CEDC = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -242,6 +242,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -434,7 +435,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = KKHXU36BGT;
+				DEVELOPMENT_TEAM = 74MC75RT69;
 				INFOPLIST_FILE = RotationDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = LJ.RotationDemo;
@@ -446,7 +447,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = KKHXU36BGT;
+				DEVELOPMENT_TEAM = 74MC75RT69;
 				INFOPLIST_FILE = RotationDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = LJ.RotationDemo;
